@@ -1,10 +1,12 @@
-import "./App.css";
+import TopBar from "./components/TopBar";
+import UploadScreen from "./screens/UploadScreen";
 
 function App() {
   return (
-    <>
-      <h1>Hello world</h1>
-    </>
+    <div className="bg-background min-h-screen">
+      <TopBar />
+      <UploadScreen />
+    </div>
   );
 }
 
