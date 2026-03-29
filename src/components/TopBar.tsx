@@ -18,7 +18,7 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   { label: "Upload", to: "/" },
-  { label: "Validation" },
+  { label: "Validation", to: "/validation" },
   { label: "Metadata", to: "/metadata" },
   { label: "Ready" },
 ];
