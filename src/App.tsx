@@ -1,13 +1,14 @@
+import { Outlet } from "react-router-dom";
+
 import TopBar from "./components/TopBar";
-import UploadScreen from "./screens/UploadScreen";
 
 function App() {
   return (
     <div className="bg-background min-h-screen">
       <TopBar />
-      <UploadScreen />
+      <Outlet />
     </div>
   );
 }
 
-export default App;
+export default App
