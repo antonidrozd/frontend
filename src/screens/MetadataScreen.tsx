@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -15,6 +15,7 @@ import {
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { useUploadStore } from "@/store/uploadStore";
 
 const metadataSchema = z.object({
   title: z
@@ -29,6 +30,11 @@ type MetadataFormValues = z.infer<typeof metadataSchema>;
 
 export function MetadataScreen() {
   const [tagInput, setTagInput] = useState("");
+  const uploadResponse = useUploadStore((state) => state.response);
+
+  useEffect(() => {
+    console.log(uploadResponse);
+  }, [uploadResponse]);
 
   const {
     register,
@@ -79,9 +85,7 @@ export function MetadataScreen() {
       <main className="px-4 py-8 sm:px-6 md:px-8 md:py-10">
         <div className="mx-auto w-full max-w-3xl">
           <div className="mb-8 ml-2 flex justify-center content-center">
-            <h1
-              className="text-primary [text-shadow:0_0_10px_rgba(0,200,255,0.8)] [filter:drop-shadow(0_0_0px_rgba(0,200,255,0.6))] text-4xl font-semibold uppercase tracking-widest"
-            >
+            <h1 className="text-primary [text-shadow:0_0_10px_rgba(0,200,255,0.8)] [filter:drop-shadow(0_0_0px_rgba(0,200,255,0.6))] text-4xl font-semibold uppercase tracking-widest">
               Metadata
             </h1>
           </div>
