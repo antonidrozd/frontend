@@ -7,7 +7,11 @@ import {
   FileJson2,
   FolderTree,
 } from "lucide-react";
-import * as ReactJsonViewModule from "react-json-view";
+import {
+  JsonView,
+  darkStyles as jsonDarkStyles,
+} from "react-json-view-lite";
+import "react-json-view-lite/dist/index.css";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -20,25 +24,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useUploadStore } from "@/store/uploadStore";
 
-function resolveReactJsonComponent(module: unknown) {
-  const candidate = module as {
-    default?: { default?: unknown } | unknown;
-    reactJsonView?: unknown;
-  };
-
-  if (
-    candidate.default &&
-    typeof candidate.default === "object" &&
-    candidate.default !== null &&
-    "default" in candidate.default
-  ) {
-    return (candidate.default as { default?: unknown }).default;
-  }
-
-  return candidate.default ?? candidate.reactJsonView ?? module;
-}
-
-const ReactJson: any = resolveReactJsonComponent(ReactJsonViewModule);
+const expandToSecondLevel = (level: number) => level < 2;
 
 export function ExportScreen() {
   const uploadResponse = useUploadStore((state) => state.response);
@@ -171,23 +157,14 @@ export function ExportScreen() {
         <CardContent className="p-6">
           <div className="bg-background/70 border-border/70 min-h-[560px] overflow-auto rounded-2xl border p-4">
             {activeView === "tree" ? (
-              <ReactJson
-                src={exportData}
-                name="root"
-                theme="ashes"
-                collapsed={2}
-                enableClipboard={false}
-                displayDataTypes={false}
-                displayObjectSize={false}
-                iconStyle="triangle"
-                style={{
-                  backgroundColor: "transparent",
-                  fontFamily:
-                    "'Geist Variable', ui-monospace, SFMono-Regular, monospace",
-                  fontSize: "1rem",
-                  padding: "0.5rem",
-                }}
-              />
+              <div className="font-mono text-base">
+                <JsonView
+                  data={exportData}
+                  shouldExpandNode={expandToSecondLevel}
+                  clickToExpandNode
+                  style={jsonDarkStyles}
+                />
+              </div>
             ) : (
               <pre className="text-foreground/90 text-base leading-7 whitespace-pre-wrap break-words font-mono">
                 {jsonString}
