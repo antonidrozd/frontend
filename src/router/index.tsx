@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 
 import App from "@/App";
 import { DataInspectionScreen } from "@/screens/DataInspectionScreen";
+import { ExportScreen } from "@/screens/ExportScreen";
 import UploadScreen from "@/screens/UploadScreen";
 import { MetadataScreen } from "@/screens/MetadataScreen";
 
@@ -21,6 +22,10 @@ export const router = createBrowserRouter([
       {
         path: "metadata",
         element: <MetadataScreen />,
+      },
+      {
+        path: "export",
+        element: <ExportScreen />,
       },
     ],
   },

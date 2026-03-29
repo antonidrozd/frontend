@@ -11,6 +11,12 @@ export type UploadWarning = {
   message: string;
 };
 
+export type UploadMetadata = {
+  title: string;
+  description: string;
+  tags: string[];
+};
+
 export type UploadFileResponse = {
   warning: UploadWarning[];
   infoAmmount: number;
@@ -22,6 +28,7 @@ export type UploadFileResponse = {
     refined: string;
   };
   sumary: string;
+  metadata?: UploadMetadata;
 };
 
 type UploadFileOptions = {

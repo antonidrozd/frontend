@@ -20,7 +20,7 @@ const navItems: NavItem[] = [
   { label: "Upload", to: "/" },
   { label: "Validation", to: "/validation" },
   { label: "Metadata", to: "/metadata" },
-  { label: "Ready" },
+  { label: "Ready", to: "/export" },
 ];
 
 const TopBar = () => {

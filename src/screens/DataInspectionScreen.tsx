@@ -1,11 +1,16 @@
 import { AlertOctagon, AlertTriangle, Info } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import ImageViewer from "@/components/DataViewer/ImageViewer";
+import PdfViewer from "@/components/DataViewer/PdfViewer";
 import TextViewer from "@/components/DataViewer/TextViewer";
 import type { UploadWarning, UploadWarningLevel } from "@/api/client";
+import { Button } from "@/components/ui/button";
 import { useUploadStore } from "@/store/uploadStore";
 
 const supportedTextFileTypes = new Set(["txt", "md", "csv"]);
-const supportedImageFileTypes = new Set(["jpg", "png", "svg"]);
+const supportedImageFileTypes = new Set(["jpg", "jpeg", "png", "svg"]);
+const supportedPdfFileTypes = new Set(["pdf"]);
 
 type WarningTileProps = {
   title: string;
@@ -120,10 +125,12 @@ function decodeBase64Content(value: string) {
 }
 
 export function DataInspectionScreen() {
+  const navigate = useNavigate();
   const response = useUploadStore((state) => state.response);
   const fileType = response?.fileType?.toLowerCase() ?? "";
   const isSupportedTextFile = supportedTextFileTypes.has(fileType);
   const isSupportedImageFile = supportedImageFileTypes.has(fileType);
+  const isSupportedPdfFile = supportedPdfFileTypes.has(fileType);
   const aiSummary = response?.sumary?.trim() || "No AI summary available.";
   const warnings = response?.warning ?? [];
   const criticalWarnings = warnings.filter((warning) => warning.level === "critical");
@@ -137,7 +144,7 @@ export function DataInspectionScreen() {
     ? decodeBase64Content(response.data.refined)
     : "Brak danych przetworzonych.";
   const imageMimeType =
-    fileType === "jpg"
+    fileType === "jpg" || fileType === "jpeg"
       ? "image/jpeg"
       : fileType === "svg"
         ? "image/svg+xml"
@@ -174,10 +181,19 @@ export function DataInspectionScreen() {
             mimeType: imageMimeType,
           }}
         />
+      ) : isSupportedPdfFile ? (
+        <PdfViewer
+          originalPanel={{
+            content: response?.data.original ?? "",
+          }}
+          processedPanel={{
+            content: response?.data.refined ?? "",
+          }}
+        />
       ) : (
         <div className="border-border/60 bg-card/60 text-muted-foreground rounded-[28px] border px-6 py-8 text-base backdrop-blur">
           This preview is currently available for `.txt`, `.md`, `.csv`, `.jpg`,
-          `.png`, and `.svg` files.
+          `.png`, `.svg`, and `.pdf` files.
         </div>
       )}
 
@@ -221,6 +237,19 @@ export function DataInspectionScreen() {
           messages={infoWarnings}
           level="info"
         />
+      </div>
+
+      <div className="flex justify-center pt-8">
+        <Button
+          type="button"
+          size="lg"
+          variant="outline"
+          className="shadow-sm hover:border-primary"
+          onClick={() => navigate("/metadata")}
+        >
+          Validate
+          <ArrowRight />
+        </Button>
       </div>
     </div>
   );

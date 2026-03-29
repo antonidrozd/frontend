@@ -1,5 +1,6 @@
 import { ArrowRight } from "lucide-react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { uploadFile } from "@/api/client";
 import { Button } from "@/components/ui/button";
@@ -18,6 +19,7 @@ import UploadDropzone from "@/components/upload/UploadDropzone";
 import { useUploadStore } from "@/store/uploadStore";
 
 const UploadScreen = () => {
+  const navigate = useNavigate();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [eraseFacesEnabled, setEraseFacesEnabled] = useState(false);
   const [aiSummaryEnabled, setAiSummaryEnabled] = useState(false);
@@ -46,6 +48,7 @@ const UploadScreen = () => {
       setUploadResponse(response);
       setDrawerOpen(false);
       console.log("Upload response:", response);
+      navigate("/validation");
     } catch (error) {
       console.error("Upload failed:", error);
       setUploadError(

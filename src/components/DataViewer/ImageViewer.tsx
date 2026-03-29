@@ -47,16 +47,37 @@ function buildImageSource(content: string, mimeType: ImageMimeType) {
     return "";
   }
 
-  if (
-    content.startsWith("data:image/") ||
-    content.startsWith("http://") ||
-    content.startsWith("https://") ||
-    content.startsWith("/")
-  ) {
-    return content;
+  const normalizedContent = content
+    .trim()
+    .replace(/^['"]|['"]$/g, "")
+    .replace(/^b['"]|['"]$/g, "");
+
+  if (!normalizedContent) {
+    return "";
   }
 
-  return `data:${mimeType};base64,${content}`;
+  if (normalizedContent.startsWith("data:image/")) {
+    return normalizedContent;
+  }
+
+  if (
+    normalizedContent.startsWith("http://") ||
+    normalizedContent.startsWith("https://")
+  ) {
+    return normalizedContent;
+  }
+
+  const contentWithoutPrefix = normalizedContent.replace(
+    /^data:[^;]+;base64,/,
+    "",
+  );
+  const compactBase64 = contentWithoutPrefix.replace(/\s+/g, "");
+
+  if (!compactBase64) {
+    return "";
+  }
+
+  return `data:${mimeType};base64,${compactBase64}`;
 }
 
 function ImageViewerPanel({
